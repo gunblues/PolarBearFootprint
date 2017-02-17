@@ -165,7 +165,7 @@
            	   "ts": new Date().getTime() 
            };
 
-           JSONP.get('/createfootprintjsonp', {"json":JSON.stringify(json)}, function(data) {
+           JSONP.get('/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
 					console.log(data);	
            		});
 			});

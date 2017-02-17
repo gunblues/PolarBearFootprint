@@ -1,12 +1,12 @@
 <?php
 /**
- * @name CreateFootprintJsonpController
+ * @name FootprintjsonpController
  * @author gunblues
  * @desc 默认控制器
  * @see http://www.php.net/manual/en/class.yaf-controller-abstract.php
  */
 
-class CreateFootprintJsonpController extends CreateFootprintController 
+class FootprintjsonpController extends FootprintController 
 {
 	public $jsonp = true;
 }
