@@ -147,10 +147,6 @@
         jsArr.push(http + "cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/1.5.0/fingerprint2.min.js?a=" + ts4);
     }
 
-    if (typeof(platforms) === "undefined") {
-        jsArr.push(http + "cdnjs.cloudflare.com/ajax/libs/platform/1.3.3/platform.js?a=" + ts4);
-    }   
-
     jsmultiloader(
         jsArr,
         function() {
@@ -160,7 +156,8 @@
                 "title": document.title,
                 "desc": getMetaContentByProperty("og:description"),
                 "url": document.URL,
-                "ts": new Date().getTime() 
+                "ts": new Date().getTime(),
+                "ua": navigator.userAgent
             };
 
             if (typeof(pbfp) === 'object' && pbfp.hasOwnProperty("sid") && pbfp.hasOwnProperty("sn")) {
