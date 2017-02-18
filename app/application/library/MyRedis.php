@@ -6,12 +6,11 @@ class MyRedis
     static function init() {
         if (self::$redis === null) {
             self::$redis = new Redis();
-            if(self::$redis->pconnect('127.0.0.1', 6379) === false) {
+            if (self::$redis->pconnect(Yaf_Application::app()->getConfig()->redis->host, 6379) === false) {
                 error_log("Redis pconnect failed");
                 return false;
             }
         }
-
         return true;
     }
 
