@@ -8,7 +8,7 @@ Gather User Information
 
 ##### include js (sniff by fingerprint)
 ```javascript
-  <script async src="your_host/assets/js/pbfp.js?<?php echo time(); ?>"></script>
+  <script async src="your_host/assets/js/pbfp.js"></script>
   <script>
       var pbfp = pbfp || {};
       if (typeof(pbfp) === 'object') {
