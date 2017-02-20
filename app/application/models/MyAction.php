@@ -4,6 +4,7 @@ class MyActionModel {
 
     //write your own action here
     static function execute($data) {
+        MyRedis::init();
 		MyRedis::lpush("footprint", json_encode($data));
     }
 }

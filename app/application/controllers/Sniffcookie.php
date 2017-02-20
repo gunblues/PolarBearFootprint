@@ -10,7 +10,6 @@ class SniffcookieController extends Yaf_Controller_Abstract
 {
     public function init () {
         Yaf_Dispatcher::getInstance()->disableView();
-        MyRedis::init();
     }
 
     public function indexAction() {
