@@ -165,7 +165,7 @@
                 json.sn= pbfp.sn;
             }
 
-            JSONP.get('/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
+            JSONP.get('your_host/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
                      console.log(data);  
                  });
             });
