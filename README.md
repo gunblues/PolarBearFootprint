@@ -81,12 +81,14 @@ Shortest transaction:	        0.12
 ```
 
 ##### network status
+```report
 PING my_host (104.198.123.84): 56 data bytes
 64 bytes from 104.198.123.84: icmp_seq=0 ttl=56 time=123.134 ms
 64 bytes from 104.198.123.84: icmp_seq=1 ttl=56 time=72.499 ms
 64 bytes from 104.198.123.84: icmp_seq=2 ttl=56 time=69.226 ms
 64 bytes from 104.198.123.84: icmp_seq=3 ttl=56 time=69.512 ms
 64 bytes from 104.198.123.84: icmp_seq=4 ttl=56 time=81.412 ms
+```
 
 ## If you want to relay to elasticsearch by logstash
 ```config
