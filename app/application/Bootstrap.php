@@ -25,12 +25,12 @@ class Bootstrap extends Yaf_Bootstrap_Abstract{
         $route = new Yaf_Route_Rewrite(
             '/pbfp\.png',
             array(
-                'controller' => 'sniffsession',
+                'controller' => 'sniffcookie',
                 'action' => 'index',
             )
         );
 
-        $router->addRoute('sniffsession', $route);
+        $router->addRoute('sniffcookie', $route);
     }
 
 	public function _initView(Yaf_Dispatcher $dispatcher){

@@ -1,12 +1,12 @@
 <?php
 /**
- * @name SniffsessionController
+ * @name SniffcookieController
  * @author gunblues
  * @desc 默认控制器
  * @see http://www.php.net/manual/en/class.yaf-controller-abstract.php
  */
 
-class SniffsessionController extends Yaf_Controller_Abstract 
+class SniffcookieController extends Yaf_Controller_Abstract 
 {
     public function init () {
         Yaf_Dispatcher::getInstance()->disableView();
