@@ -6,7 +6,7 @@ Gather User Information
   
 ## Client Side Usage
 
-##### include js (sniff by fingerprint)
+##### Include js (sniff by fingerprint)
 ```javascript
   <script async src="your_host/assets/js/pbfp.min.js"></script>
   <script>
@@ -18,7 +18,7 @@ Gather User Information
   </script>
 ```
 
-##### include image (sniff by cookie)
+##### Include image (sniff by cookie)
 ```html
 <img src="your_host/pbfp.png">
 ```  
@@ -41,6 +41,52 @@ Gather User Information
   6. Modify Your_DocumentRoot/application/models/MyAction.php (My Usage is push to redis and then logstash pop from it)
   7. Put code (include js or image) at client side
   8. Start to gather!!
+
+## stress test
+
+##### Include js will via api so I test it
+```report
+siege -c3000 -t30S -H 'Content-Type: application/json' 'http://my_host/footprint POST {"fp": "abc","title": "test","desc": "desc","sid": "mysid","sn": "facebook","url": "http://www.google.com","ts": 1487584551, "ua": "my user agent"}'
+
+Transactions:               14967 hits
+Availability:              100.00 %
+Elapsed time:               29.17 secs
+Data transferred:            0.46 MB
+Response time:                0.25 secs
+Transaction rate:          513.10 trans/sec
+Throughput:                0.02 MB/sec
+Concurrency:              126.05
+Successful transactions:       14967
+Failed transactions:               0
+Longest transaction:            6.73
+Shortest transaction:            0.12
+```
+
+##### Include image
+```report
+siege -c3000 -t30S http://my_host/pbfp.png
+
+Transactions:		       14369 hits
+Availability:		      100.00 %
+Elapsed time:		       34.49 secs
+Data transferred:	        1.30 MB
+Response time:		        0.27 secs
+Transaction rate:	      416.61 trans/sec
+Throughput:		        0.04 MB/sec
+Concurrency:		      111.84
+Successful transactions:       14369
+Failed transactions:	           0
+Longest transaction:	       16.63
+Shortest transaction:	        0.12
+```
+
+##### network status
+PING my_host (104.198.123.84): 56 data bytes
+64 bytes from 104.198.123.84: icmp_seq=0 ttl=56 time=123.134 ms
+64 bytes from 104.198.123.84: icmp_seq=1 ttl=56 time=72.499 ms
+64 bytes from 104.198.123.84: icmp_seq=2 ttl=56 time=69.226 ms
+64 bytes from 104.198.123.84: icmp_seq=3 ttl=56 time=69.512 ms
+64 bytes from 104.198.123.84: icmp_seq=4 ttl=56 time=81.412 ms
 
 ## If you want to relay to elasticsearch by logstash
 ```config
