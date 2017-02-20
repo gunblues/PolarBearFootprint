@@ -9,12 +9,12 @@
 class FootprintController extends ApiBaseController 
 {
     public function indexAction() {
-		$ret = $this->getJson();
-		if ($ret === false) {
+		$data = $this->getJson();
+		if ($data === false) {
 			return;
 		}
 
-		if (!$this->validateParameter($ret, array(
+		if (!$this->validateParameter($data, array(
 			'required' => array('fp', 'url', 'ts'),
 			'dataType' => array(
 				'url' => FILTER_VALIDATE_URL,
@@ -24,9 +24,9 @@ class FootprintController extends ApiBaseController
 			return;
 		}
 
-		$ret['ip'] = MyUtil::getIpAddress();
+		$data['ip'] = MyUtil::getIpAddress();
 
-		MyRedis::lpush("footprint", json_encode($ret));
+		MyActionModel::execute($data);
         $this->outputJson();
 	}
 }

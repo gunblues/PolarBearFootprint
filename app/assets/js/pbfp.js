@@ -156,7 +156,7 @@
                 "title": document.title,
                 "desc": getMetaContentByProperty("og:description"),
                 "url": document.URL,
-                "ts": new Date().getTime(),
+                "ts": Math.round(new Date().getTime() / 1000),
                 "ua": navigator.userAgent
             };
 
