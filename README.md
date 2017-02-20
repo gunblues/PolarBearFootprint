@@ -29,7 +29,7 @@ Gather User Information
   3. Write your own webserver config by refering to PolarBearFootprint/config
   4. cp -r PolarBearFootprint/app/* Your_DocumentRoot
   5. Modify Your_DocumentRoot/application/models/MyAction.php (My Usage is push to redis and then logstash pop from it)
-  6. Put code at client side
+  6. Put code (include js or image) at client side
   7. Start to gather!!
   
 ## If you want to relay to elasticsearch by logstash
