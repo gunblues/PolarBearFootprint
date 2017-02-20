@@ -43,7 +43,7 @@ Gather User Information
   8. Start to gather!!
 
 ## stress test
-
+#### Test Machine: Google Cloud Platform n1-standard-2
 ##### Include js will via api so I test it
 ```report
 siege -c3000 -t30S -H 'Content-Type: application/json' 'http://my_host/footprint POST {"fp": "abc","title": "test","desc": "desc","sid": "mysid","sn": "facebook","url": "http://www.google.com","ts": 1487584551, "ua": "my user agent"}'
