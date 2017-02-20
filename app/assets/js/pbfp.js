@@ -144,7 +144,7 @@
 
     var jsArr = [];
     if (typeof(Fingerprint) === "undefined") {
-        jsArr.push(http + "cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/1.5.0/fingerprint2.min.js?a=" + ts4);
+        jsArr.push(http + "your_host/assets/js/fp.js?a=" + ts4);
     }
 
     jsmultiloader(
