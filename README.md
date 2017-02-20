@@ -8,7 +8,7 @@ Gather User Information
 
 ##### include js (sniff by fingerprint)
 ```javascript
-  <script async src="your_host/assets/js/pbfp.js"></script>
+  <script async src="your_host/assets/js/pbfp.min.js"></script>
   <script>
       var pbfp = pbfp || {};
       if (typeof(pbfp) === 'object') {
@@ -33,11 +33,11 @@ Gather User Information
   1. Clone the project 
   2. Install php yaf, refer to https://github.com/laruence/yaf
   3. Write your own webserver config by refering to PolarBearFootprint/config
-  4. cp -r PolarBearFootprint/app/* Your_DocumentRoot
-  5. Modify Your_DocumentRoot/application/models/MyAction.php (My Usage is push to redis and then logstash pop from it)
-  6. If you want to include js at client side, modify Your_DocumentRoot/assets/js/pbfp.js (find "your_host" at file and change it)
-  6. Put code (include js or image) at client side
-  7. Start to gather!!
+  4. If you want to include js at client side, modify Your_DocumentRoot/assets/js/pbfp.js (find "your_host" at file and change it). gulp it!!
+  5. cp -r PolarBearFootprint/app/* Your_DocumentRoot
+  6. Modify Your_DocumentRoot/application/models/MyAction.php (My Usage is push to redis and then logstash pop from it)
+  7. Put code (include js or image) at client side
+  8. Start to gather!!
 
 ## If you want to relay to elasticsearch by logstash
 ```config
