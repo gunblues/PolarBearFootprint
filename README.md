@@ -21,6 +21,12 @@ Gather User Information
 ##### include image (sniff by cookie)
 ```html
 <img src="your_host/pbfp.png">
+```  
+```remark  
+  Why just use our own cookie not php session id? Php session id use cookie too. 
+  if user clear the cookie, php session id will be regenerate. In addition, php 
+  session needs storage at server side. If your client side have a lot of traffic, 
+  that will be the other issue
 ```
 
 ## Installation
@@ -31,7 +37,7 @@ Gather User Information
   5. Modify Your_DocumentRoot/application/models/MyAction.php (My Usage is push to redis and then logstash pop from it)
   6. Put code (include js or image) at client side
   7. Start to gather!!
-  
+
 ## If you want to relay to elasticsearch by logstash
 ```config
 input {
