@@ -46,49 +46,53 @@ Gather User Information
 #### Test Machine: Google Cloud Platform n1-standard-2
 ##### Include js will via api so I test it
 ```report
-siege -c3000 -t30S -H 'Content-Type: application/json' 'http://my_host/footprint POST {"fp": "abc","title": "test","desc": "desc","sid": "mysid","sn": "facebook","url": "http://www.google.com","ts": 1487584551, "ua": "my user agent"}'
+siege -c10000 -t300S -H 'Content-Type: application/json' 'http://my_host/footprint POST {"fp": "abc","title": "test","desc": "desc","sid": "mysid","sn": "facebook","url": "http://www.google.com","ts": 1487584551, "ua": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.94 Safari/537.36"}'
 
-Transactions:               14967 hits
-Availability:              100.00 %
-Elapsed time:               29.17 secs
-Data transferred:            0.46 MB
-Response time:                0.25 secs
-Transaction rate:          513.10 trans/sec
-Throughput:                0.02 MB/sec
-Concurrency:              126.05
-Successful transactions:       14967
-Failed transactions:               0
-Longest transaction:            6.73
-Shortest transaction:            0.12
+Transactions:		      174359 hits
+Availability:		      100.00 %
+Elapsed time:		      299.82 secs
+Data transferred:	        5.32 MB
+Response time:		        0.19 secs
+Transaction rate:	      581.55 trans/sec
+Throughput:		        0.02 MB/sec
+Concurrency:		      107.66
+Successful transactions:      174359
+Failed transactions:	           0
+Longest transaction:	        2.70
+Shortest transaction:	        0.12
 ```
 
 ##### Include image
 ```report
-siege -c3000 -t30S http://my_host/pbfp.png
+siege -c10000 -t300S http://my_host/pbfp.png
 
-Transactions:		       14369 hits
+Transactions:		      168975 hits
 Availability:		      100.00 %
-Elapsed time:		       34.49 secs
-Data transferred:	        1.30 MB
-Response time:		        0.27 secs
-Transaction rate:	      416.61 trans/sec
-Throughput:		        0.04 MB/sec
-Concurrency:		      111.84
-Successful transactions:       14369
+Elapsed time:		      299.71 secs
+Data transferred:	       15.31 MB
+Response time:		        0.20 secs
+Transaction rate:	      563.80 trans/sec
+Throughput:		        0.05 MB/sec
+Concurrency:		      112.64
+Successful transactions:      168975
 Failed transactions:	           0
-Longest transaction:	       16.63
+Longest transaction:	        5.21
 Shortest transaction:	        0.12
 ```
 
 ##### network status
 ```report
-PING my_host (104.198.123.84): 56 data bytes
-64 bytes from 104.198.123.84: icmp_seq=0 ttl=56 time=123.134 ms
-64 bytes from 104.198.123.84: icmp_seq=1 ttl=56 time=72.499 ms
-64 bytes from 104.198.123.84: icmp_seq=2 ttl=56 time=69.226 ms
-64 bytes from 104.198.123.84: icmp_seq=3 ttl=56 time=69.512 ms
-64 bytes from 104.198.123.84: icmp_seq=4 ttl=56 time=81.412 ms
+PING my_host (x.x.x.x): 56 data bytes
+64 bytes from x.x.x.x: icmp_seq=0 ttl=56 time=123.134 ms
+64 bytes from x.x.x.x: icmp_seq=1 ttl=56 time=72.499 ms
+64 bytes from x.x.x.x: icmp_seq=2 ttl=56 time=69.226 ms
+64 bytes from x.x.x.x: icmp_seq=3 ttl=56 time=69.512 ms
+64 bytes from x.x.x.x: icmp_seq=4 ttl=56 time=81.412 ms
 ```
+
+### machine status
+![alt tag](https://github.com/gunblues/PolarBearFootprint/raw/master/test/machine_status_at_stress_test.png
+)
 
 ## If you want to relay to elasticsearch by logstash
 ```config
