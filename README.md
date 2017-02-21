@@ -41,6 +41,11 @@ Gather User Information
   6. Modify Your_DocumentRoot/application/models/MyAction.php (My Usage is push to redis and then logstash pop from it)
   7. Put code (include js or image) at client side
   8. Start to gather!!
+  
+## Example
+  After Install completely, use browser to open your host and then you will see the image like belowed picture. You can check the page source to see that this page use two methods of including js and image
+![alt tag](https://raw.githubusercontent.com/gunblues/PolarBearFootprint/master/example/example.png
+)  
 
 ## stress test
 #### Test Machine: Google Cloud Platform n1-standard-2
