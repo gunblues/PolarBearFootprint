@@ -47,7 +47,7 @@ Gather User Information
 ![alt tag](https://raw.githubusercontent.com/gunblues/PolarBearFootprint/master/example/example.png
 )  
 
-## stress test
+## Stress test
 #### Test Machine: Google Cloud Platform n1-standard-2
 ##### Include js will via api so I test it
 ```report
@@ -85,7 +85,7 @@ Longest transaction:	        5.21
 Shortest transaction:	        0.12
 ```
 
-##### network status
+##### Network status
 ```report
 PING my_host (x.x.x.x): 56 data bytes
 64 bytes from x.x.x.x: icmp_seq=0 ttl=56 time=123.134 ms
@@ -95,7 +95,7 @@ PING my_host (x.x.x.x): 56 data bytes
 64 bytes from x.x.x.x: icmp_seq=4 ttl=56 time=81.412 ms
 ```
 
-### machine status
+### Machine status
 ![alt tag](https://github.com/gunblues/PolarBearFootprint/raw/master/test/machine_status_at_stress_test.png
 )
 
