@@ -166,8 +166,10 @@
             }
 
             JSONP.get('//your_host/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
-                     console.log(data);  
-                 });
+                   if (typeof console !== "undefined" && typeof console.log !== "undefined") {
+                       console.log(data);
+                   }
+               });
             });
         }
     );
