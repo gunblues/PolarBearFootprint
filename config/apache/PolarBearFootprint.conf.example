@@ -5,7 +5,7 @@
 
     RewriteEngine On
 
-    RewriteCond %{HTTP_USER_AGENT} ^.*MJ12bot [NC]
+    RewriteCond %{HTTP_USER_AGENT} ^.*bot [NC]
     RewriteRule .* - [F]
     RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} -s [OR]
     RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} -l [OR]
