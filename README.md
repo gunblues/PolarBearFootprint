@@ -127,6 +127,7 @@ filter {
     }
     mutate {
       convert => [ "[geoip][coordinates]", "float"]
+      remove_field => ["ua"]
     }
   }
 }
@@ -144,5 +145,20 @@ output {
         }
         stdout { codec => rubydebug }
     }
+}
+```
+#### elasticsearch mapping
+```mapping
+PUT polarbearfootprint 
+{
+  "mappings": {
+    "footprint": { 
+      "_all":       { "enabled": false  }, 
+      "properties": { 
+        "fp":    { "type": "keyword"  }, 
+        "txn_id":     { "type": "keyword"  }
+      }
+    }
+  }
 }
 ```
