@@ -155,8 +155,16 @@ PUT polarbearfootprint
     "footprint": { 
       "_all":       { "enabled": false  }, 
       "properties": { 
-        "fp":    { "type": "keyword"  }, 
-        "txn_id":     { "type": "keyword"  }
+        "fp":    { 
+          "type": "keyword"  
+        }, 
+        "txn_id": { 
+          "type": "keyword"  
+        },
+        "url": {
+          "type": "string",
+          "index": "not_analyzed"
+        }         
       }
     }
   }
