@@ -37,10 +37,11 @@ Gather User Information
     * Modify PolarBearFootprint/assets/js/pbfp.js (find "your_host" at file and change it).
     * npm install --save-dev gulp gulp-rename gulp-uglify
     * gulp it!!
-  5. cp -r PolarBearFootprint/app/* Your_DocumentRoot
-  6. Modify Your_DocumentRoot/application/models/MyAction.php (My Usage is push to redis and then logstash pop from it)
-  7. Put code (include js or image) at client side
-  8. Start to gather!!
+  5. Modify PolarBearFootprint/app/application/models/MyAction.php (My Usage is push to redis and then logstash pop from it)
+  6. If you want to use PolarBearFootprint/app/application/library/MyRedis.php, please modify redis hot at PolarBearFootprint/app/conf/application.ini    
+  7. cp -r PolarBearFootprint/app/* Your_DocumentRoot
+  8. Put code (include js or image) at client side
+  9. Start to gather!!
   
 ## Example
   After Install completely, use browser to open your host and then you will see the image like belowed picture. You can check the page source to see that this page use two methods of including js and image
