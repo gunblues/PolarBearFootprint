@@ -18,7 +18,8 @@ class FootprintController extends ApiBaseController
 			'required' => array('fp', 'url', 'ts'),
 			'dataType' => array(
 				'url' => FILTER_VALIDATE_URL,
-				'ts' => FILTER_VALIDATE_INT
+				'ts' => FILTER_VALIDATE_INT,
+				'away'=> FILTER_VALIDATE_INT
 			)
 		))) {
 			return;

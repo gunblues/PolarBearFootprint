@@ -144,33 +144,64 @@
 
     var jsArr = [];
     if (typeof(Fingerprint) === "undefined") {
-        jsArr.push(http + "your_host/assets/js/fp.js?a=" + ts4);
+        jsArr.push(http + "localhost/assets/js/fp.js?a=" + ts4);
     }
+
+	var txnId;
+	var myfp;
 
     jsmultiloader(
         jsArr,
         function() {
             new Fingerprint2().get(function(fingerprint, components){
+			myfp = fingerprint;	
+			var ts = Math.round(new Date().getTime() / 1000);
             var json = {
-                "fp": fingerprint,
+                "fp": myfp,
                 "title": document.title,
                 "desc": getMetaContentByProperty("og:description"),
                 "url": document.URL,
-                "ts": Math.round(new Date().getTime() / 1000),
+                "ts": ts,
                 "ua": navigator.userAgent
             };
 
             if (typeof(pbfp) === 'object' && pbfp.hasOwnProperty("sid") && pbfp.hasOwnProperty("sn")) {
                 json.sid = pbfp.sid;
-                json.sn= pbfp.sn;
+                json.sn = pbfp.sn;
             }
 
-            JSONP.get('//your_host/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
+			if (typeof myfp === 'string' && myfp.length !== 0) {
+				txnId = myfp + ts;
+				json.txn_id = txnId;
+			}
+
+            JSONP.get('/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
                    if (typeof console !== "undefined" && typeof console.log !== "undefined") {
                        console.log(data);
                    }
                });
             });
+
+			if (typeof window.onbeforeunload !== "undefined") {
+				window.onbeforeunload = function() {
+					if (typeof txnId !== "undefined" && typeof myfp !== "undefined") {
+		            	var json = {
+		            	    "fp": myfp,
+		            	    "url": document.URL,
+		            	    "ts": Math.round(new Date().getTime() / 1000),
+		            	    "away": 1,
+							"txn_id": txnId	
+		            	};
+						
+		    	        JSONP.get('/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
+		    	               if (typeof console !== "undefined" && typeof console.log !== "undefined") {
+		    	                   console.log(data);
+		    	               }
+		    	         });
+		    	     }
+		
+				}
+			}
         }
     );
 
