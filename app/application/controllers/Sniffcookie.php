@@ -17,7 +17,7 @@ class SniffcookieController extends Yaf_Controller_Abstract
 		$v = "";
 		if (!isset($_COOKIE[$k])) {
 			$v = uniqid(gethostname(), true);
-			setcookie($k, $v, time() + (86400 * 365), "/"); 
+			setcookie($k, $v, time() + (86400 * 365 * 10), "/"); 
 		} else {
 			$v = $_COOKIE[$k];
 		}
