@@ -17,10 +17,10 @@ gulp.task('pbfp.min.js', function(){
         .pipe(gulp.dest('app/assets/js'));
 });
 
-gulp.task('all.js', function(){
+gulp.task('all.js', ['pbfp.min.js'], function(){
     return gulp.src(['app/assets/js/fp.js', 'app/assets/js/pbfp.min.js'])
         .pipe(concat('all.js'))
         .pipe(gulp.dest('app/assets/js'));
 });
 
-gulp.task('default', ['pbfp.min.js', 'all.js'], function(){});
+gulp.task('default', ['all.js'], function(){});
