@@ -106,7 +106,7 @@
 	    	json.txn_id = txnId;
 	    }
 
-        JSONP.get('your_host/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
+        JSONP.get('//your_host/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
                if (typeof console !== "undefined" && typeof console.log !== "undefined") {
                    console.log(data);
                }
@@ -124,7 +124,7 @@
 					"txn_id": txnId	
 	        	};
 				
-		        JSONP.get('your_host/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
+		        JSONP.get('//your_host/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
 		               if (typeof console !== "undefined" && typeof console.log !== "undefined") {
 		                   console.log(data);
 		               }

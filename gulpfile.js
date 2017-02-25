@@ -3,7 +3,8 @@ const gulp = require('gulp'),
     gp_uglify = require('gulp-uglify'),
     jshint = require('gulp-jshint'),
     concat = require('gulp-concat'),
-    replace = require('gulp-replace');
+    replace = require('gulp-replace'),
+    argv = require('yargs').argv;
 
 gulp.task('pbfp.min.js', function(){
     return gulp.src(['app/assets/js/pbfp.js'])
@@ -12,12 +13,12 @@ gulp.task('pbfp.min.js', function(){
         .pipe(gulp.dest('app/assets/js'))
         .pipe(gp_rename('pbfp.min.js'))
         .pipe(gp_uglify())
+        .pipe(replace(/your_host/g, argv.h))
         .pipe(gulp.dest('app/assets/js'));
 });
 
 gulp.task('all.js', function(){
     return gulp.src(['app/assets/js/fp.js', 'app/assets/js/pbfp.min.js'])
-        .pipe(replace(/your_host/g, '//your.host.com'))
         .pipe(concat('all.js'))
         .pipe(gulp.dest('app/assets/js'));
 });

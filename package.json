@@ -11,6 +11,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",
     "gulp-uglify": "^2.0.1",
-    "jshint": "^2.9.4"
+    "jshint": "^2.9.4",
+    "yargs": "^6.6.0"
   }
 }
