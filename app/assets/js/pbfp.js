@@ -1,68 +1,7 @@
-"use strict"; 
+/* jshint loopfunc:true */
 
 (function(window) {
-
-    var ts4 = (new Date).getTime() + Math.floor(Math.random() * 14872417);
-    var http = 'http' + (window.location.protocol.charAt(4) == 's' ? 's://' : '://');
-
-    function jsmultiloader(url, callback) {
-        var script_list = [];
-        var total = 0;
-        var _d = window.document;
-        var l;
-    
-        if (typeof (url) === 'string') {
-            script_list.push(url);
-            total++;
-        }
-        else if (typeof (url) === 'object') {
-            l = url.length;
-            for (var i = 0; i < l; i++) {
-                script_list.push(url[i]);
-                total++;
-            }
-        }
-    
-        l = script_list.length;
-        var script;
-        for (var i = 0; i < l; i++) {
-            script = '';
-            if (script_list[i].split('.').pop() === "css") {
-                script = window.document.createElement("link");
-                script.type = "text/css";
-                script.rel = "stylesheet";
-                script.href = script_list[i];
-                total--;
-            }
-            else {
-                script = _d.createElement("script");
-                script.type = "text/javascript";
-                script.src = script_list[i];
-                if (script.readyState) { // IE
-                    script.onreadystatechange = function() {
-                        if (script.readyState == "loaded" || script.readyState == "complete") {
-                            total--;
-                            if (typeof (callback) === "function" && total <= 0) {
-                                script.onreadystatechange = null;
-                                callback();
-                            }
-                        }
-                    };
-                }
-                else { // other browsers
-                    script.onload = function() {
-                        total--;
-                        if (typeof (callback) === "function" && total <= 0) {
-                            callback();
-                        }
-                    };
-                }
-            }
-    
-            (_d.getElementsByTagName('head')[0] || _d.getElementsByTagName('body')[0])
-            .appendChild(script);
-        }
-    }
+    "use strict"; 
 
     /*
     * Lightweight JSONP fetcher
@@ -121,7 +60,7 @@
                 window[ jsonp ] = null;
             };
 
-            load(url + query + (callbackName||config['callbackName']||'callback') + '=' + jsonp);
+            load(url + query + (callbackName||config.callbackName||'callback') + '=' + jsonp);
             return jsonp;
         }
         function setDefaults(obj){
@@ -133,76 +72,66 @@
         };
     }(window));
 
-    function getMetaContentByProperty(property,content){
+    function getMetaContentByProperty(property, content){
         try {
-            var content = (content==null)?'content':content;
-            return document.querySelector("meta[property='" + property + "']").getAttribute(content);
+            var ct = (content === null) ? 'content' : content;
+            return document.querySelector("meta[property='" + property + "']").getAttribute(ct);
         } catch(e) {
             return "";
         }
     }
 
-    var jsArr = [];
-    if (typeof(Fingerprint) === "undefined") {
-        jsArr.push(http + "localhost/assets/js/fp.js?a=" + ts4);
-    }
-
 	var txnId;
 	var myfp;
 
-    jsmultiloader(
-        jsArr,
-        function() {
-            new Fingerprint2().get(function(fingerprint, components){
-			myfp = fingerprint;	
-			var ts = Math.round(new Date().getTime() / 1000);
-            var json = {
-                "fp": myfp,
-                "title": document.title,
-                "desc": getMetaContentByProperty("og:description"),
-                "url": document.URL,
-                "ts": ts,
-                "ua": navigator.userAgent
-            };
+    new Fingerprint2().get(function(fingerprint, components){
+	    myfp = fingerprint;	
+	    var ts = Math.round(new Date().getTime() / 1000);
+        var json = {
+            "fp": myfp,
+            "title": document.title,
+            "desc": getMetaContentByProperty("og:description"),
+            "url": document.URL,
+            "ts": ts,
+            "ua": navigator.userAgent
+        };
 
-            if (typeof(pbfp) === 'object' && pbfp.hasOwnProperty("sid") && pbfp.hasOwnProperty("sn")) {
-                json.sid = pbfp.sid;
-                json.sn = pbfp.sn;
-            }
-
-			if (typeof myfp === 'string' && myfp.length !== 0) {
-				txnId = myfp + ts;
-				json.txn_id = txnId;
-			}
-
-            JSONP.get('/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
-                   if (typeof console !== "undefined" && typeof console.log !== "undefined") {
-                       console.log(data);
-                   }
-               });
-            });
-
-			if (typeof window.onbeforeunload !== "undefined") {
-				window.onbeforeunload = function() {
-					if (typeof txnId !== "undefined" && typeof myfp !== "undefined") {
-		            	var json = {
-		            	    "fp": myfp,
-		            	    "url": document.URL,
-		            	    "ts": Math.round(new Date().getTime() / 1000),
-		            	    "away": 1,
-							"txn_id": txnId	
-		            	};
-						
-		    	        JSONP.get('/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
-		    	               if (typeof console !== "undefined" && typeof console.log !== "undefined") {
-		    	                   console.log(data);
-		    	               }
-		    	         });
-		    	     }
-		
-				}
-			}
+        if (typeof(pbfp) === 'object' && pbfp.hasOwnProperty("sid") && pbfp.hasOwnProperty("sn")) {
+            json.sid = pbfp.sid;
+            json.sn = pbfp.sn;
         }
-    );
+
+	    if (typeof myfp === 'string' && myfp.length !== 0) {
+	    	txnId = myfp + ts;
+	    	json.txn_id = txnId;
+	    }
+
+        JSONP.get('your_host/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
+               if (typeof console !== "undefined" && typeof console.log !== "undefined") {
+                   console.log(data);
+               }
+           });
+    });
+
+	if (typeof window.onbeforeunload !== "undefined") {
+		window.onbeforeunload = function() {
+			if (typeof txnId !== "undefined" && typeof myfp !== "undefined") {
+	        	var json = {
+	        	    "fp": myfp,
+	        	    "url": document.URL,
+	        	    "ts": Math.round(new Date().getTime() / 1000),
+	        	    "away": 1,
+					"txn_id": txnId	
+	        	};
+				
+		        JSONP.get('your_host/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
+		               if (typeof console !== "undefined" && typeof console.log !== "undefined") {
+		                   console.log(data);
+		               }
+		         });
+		     }
+	
+        };
+	}
 
 })(window);
