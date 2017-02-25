@@ -3,8 +3,8 @@ server {
     server_name yours.com 
     index index.php;
     root /var/www/PolarBearFootprint;
-    access_log /var/log/nginx/PolarBearFootprint/access.log;
-    error_log /var/log/nginx/PolarBearFootprint/error.log;
+    access_log /var/log/nginx/PolarBearFootprint-access.log;
+    error_log /var/log/nginx/PolarBearFootprint-error.log;
 
     location / {
         index index.php index.html index.htm;
