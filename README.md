@@ -34,9 +34,8 @@ Gather User Information
   2. Install php yaf, refer to https://github.com/laruence/yaf
   3. Write your own webserver config by refering to PolarBearFootprint/config
   4. If you want to include js at client side
-    * Modify PolarBearFootprint/assets/js/pbfp.js (find "your_host" at file and change it).
-    * npm install --save-dev gulp gulp-rename gulp-uglify
-    * gulp it!!
+    * npm install
+    * gulp -h your_host
   5. Modify PolarBearFootprint/app/application/models/MyAction.php (My Usage is push to redis and then logstash pop from it)
   6. If you want to use PolarBearFootprint/app/application/library/MyRedis.php, please modify redis hot at PolarBearFootprint/app/conf/application.ini    
   7. cp -r PolarBearFootprint/app/* Your_DocumentRoot
