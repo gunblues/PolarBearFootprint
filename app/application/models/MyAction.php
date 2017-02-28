@@ -17,8 +17,7 @@ class MyActionModel {
             MyRedis::lpush("page", json_encode(
                 array(
                     "id" => $host . "_" . sha1($data["url"]),
-                    "url" => $data["url"],
-                    "udpated" => date("c")
+                    "url" => $data["url"]
                 )
             ));
         }
