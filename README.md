@@ -100,6 +100,7 @@ PING my_host (x.x.x.x): 56 data bytes
 )
 
 ## If you want to relay to elasticsearch by logstash
+#### 01-polar-bear-footprint.conf
 ```config
 input {
   redis {
@@ -107,8 +108,6 @@ input {
       codec => "json"
       data_type => "list"
       key => "footprint"
-      # batch_count => 1
-      # threads => 1
       type => "footprint"
   }
 }
@@ -146,6 +145,38 @@ output {
     }
 }
 ```
+#### 02-webpage.conf
+```config
+input {
+  redis {
+      host => "your_redis_host"
+      codec => "json"
+      data_type => "list"
+      key => "page"
+      type => "page"
+  }
+}
+output {
+    if [type] == "page" {
+        elasticsearch {
+            hosts => ["your_elasticsearch_host:9200"]
+            manage_template => false
+            action => "update"
+            upsert => '{
+                "url" : "%{url}"
+            }'
+            index => "webpage"
+            document_type => "page"
+            document_id => "%{id}"
+            user => "xxx"
+            password => "yyy"
+            ssl => true
+            cacert => "your_path/ca.crt"
+        }
+        stdout { codec => rubydebug }
+    }
+}
+```
 #### elasticsearch mapping
 ```mapping
 PUT polarbearfootprint 
@@ -164,6 +195,20 @@ PUT polarbearfootprint
           "type": "string",
           "index": "not_analyzed"
         }         
+      }
+    }
+  }
+}
+
+PUT webpage 
+{
+  "mappings": {
+    "page": { 
+      "_all":       { "enabled": false  }, 
+      "properties": { 
+        "url": {
+          "type": "string"
+        }
       }
     }
   }
