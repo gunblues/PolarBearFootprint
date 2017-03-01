@@ -92,7 +92,6 @@
             "title": document.title,
             "desc": getMetaContentByProperty("og:description"),
             "url": document.URL,
-            "ts": ts,
             "ua": navigator.userAgent
         };
 
@@ -119,7 +118,6 @@
 	        	var json = {
 	        	    "fp": myfp,
 	        	    "url": document.URL,
-	        	    "ts": Math.round(new Date().getTime() / 1000),
 	        	    "away": 1,
 					"txn_id": txnId	
 	        	};

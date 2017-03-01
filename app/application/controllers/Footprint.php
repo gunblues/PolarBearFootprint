@@ -15,10 +15,9 @@ class FootprintController extends ApiBaseController
 		}
 
 		if (!$this->validateParameter($data, array(
-			'required' => array('fp', 'url', 'ts'),
+			'required' => array('fp', 'url'),
 			'dataType' => array(
 				'url' => FILTER_VALIDATE_URL,
-				'ts' => FILTER_VALIDATE_INT,
 				'away'=> FILTER_VALIDATE_INT
 			)
 		))) {
@@ -26,6 +25,7 @@ class FootprintController extends ApiBaseController
 		}
 
 		$data['ip'] = MyUtil::getIpAddress();
+		$data['ts'] = time();
 
 		MyActionModel::execute($data);
         $this->outputJson();
