@@ -163,7 +163,8 @@ output {
             manage_template => false
             action => "update"
             upsert => '{
-                "url" : "%{url}"
+                "url" : "%{url}",
+                "status" : "init"
             }'
             index => "webpage"
             document_type => "page"
@@ -208,6 +209,9 @@ PUT webpage
       "properties": { 
         "url": {
           "type": "string"
+        },
+        "status": {
+          "type": "keyword"
         }
       }
     }
