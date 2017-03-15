@@ -110,7 +110,10 @@ output {
                     "country_code2": "%{[geoip][country_code2]}",
                     "country_code3": "%{[geoip][country_code3]}",
                     "country_name": "%{[geoip][country_name]}",
-                    "location": [ %{[geoip][longitude]} , %{[geoip][latitude]}]
+                    "location": {
+                        "lon": %{[geoip][longitude]},
+                        "lat": %{[geoip][latitude]}
+                    }
                 }
             }'
             index => "pbtest"
