@@ -238,10 +238,6 @@ PUT polarbearfootprintv2
         "enabled": false
       },
       "properties": {
-        "txn_id": {
-          "type": "keyword",
-          "index": "not_analyzed"
-        },
         "fp": {
           "type": "keyword",
           "index": "not_analyzed"
@@ -376,10 +372,6 @@ PUT polarbearfootprintv2
           "type": "keyword",
           "index": "not_analyzed"
         },
-        "url": {
-          "type": "keyword",
-          "index": "not_analyzed"
-        },
         "sex": {
           "type": "keyword",
           "index": "not_analyzed"
@@ -419,7 +411,6 @@ PUT polarbearfootprintv2
           "type": "keyword",
           "index": "not_analyzed"
         },
-
         "updated": {
           "type": "date"
         }
@@ -475,7 +466,7 @@ PUT webpagev2
         "fetch_date": {
           "type": "date"
         },
-        "pageid": {
+        "page_id": {
           "type": "keyword",
           "index": "not_analyzed"
         }
