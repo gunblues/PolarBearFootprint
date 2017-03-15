@@ -144,7 +144,7 @@ filter {
         source => "ua"
     }
     mutate {
-      remove_field => ["ua"]
+      remove_field => ["ua", "@timestamp"]
     }
   }
 }
@@ -191,6 +191,13 @@ input {
       # batch_count => 1
       # threads => 1
       type => "urltask"
+  }
+}
+filter {
+  if [type] == "urltask" {
+    mutate {
+      remove_field => ["ua", "@timestamp"]
+    }
   }
 }
 output {
