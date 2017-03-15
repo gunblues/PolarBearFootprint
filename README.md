@@ -9,13 +9,6 @@ Gather User Information
 ##### Include js (sniff by fingerprint)
 ```javascript
   <script async src="your_host/assets/js/pbfp.min.js"></script>
-  <script>
-      var pbfp = pbfp || {};
-      if (typeof(pbfp) === 'object') {
-          pbfp.sn = "facebook";  //social network
-          pbfp.sid = "123456789";  //social id
-      }
-  </script>
 ```
 
 ##### Include image (sniff by cookie)
