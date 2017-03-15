@@ -1,7 +1,7 @@
 # PolarBearFootprint
 
 Gather User Information 
-* Include js: title, desc, url, timestamp, useragent, ip, social network, social id
+* Include js: title, desc, url, timestamp, useragent, ip
 * Include image: url, timestamp, useragent, ip
   
 ## Client Side Usage
