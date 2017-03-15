@@ -47,58 +47,6 @@ Gather User Information
 ![alt tag](https://raw.githubusercontent.com/gunblues/PolarBearFootprint/master/example/example.png
 )  
 
-## Stress test
-#### Test Machine: Google Cloud Platform n1-standard-2
-##### Include js will via api so I test it
-```report
-siege -c10000 -t300S -H 'Content-Type: application/json' 'http://my_host/footprint POST {"fp": "abc","title": "test","desc": "desc","sid": "mysid","sn": "facebook","url": "http://www.google.com","ts": 1487584551, "ua": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.94 Safari/537.36"}'
-
-Transactions:		      174359 hits
-Availability:		      100.00 %
-Elapsed time:		      299.82 secs
-Data transferred:	        5.32 MB
-Response time:		        0.19 secs
-Transaction rate:	      581.55 trans/sec
-Throughput:		        0.02 MB/sec
-Concurrency:		      107.66
-Successful transactions:      174359
-Failed transactions:	           0
-Longest transaction:	        2.70
-Shortest transaction:	        0.12
-```
-
-##### Include image
-```report
-siege -c10000 -t300S http://my_host/pbfp.png
-
-Transactions:		      168975 hits
-Availability:		      100.00 %
-Elapsed time:		      299.71 secs
-Data transferred:	       15.31 MB
-Response time:		        0.20 secs
-Transaction rate:	      563.80 trans/sec
-Throughput:		        0.05 MB/sec
-Concurrency:		      112.64
-Successful transactions:      168975
-Failed transactions:	           0
-Longest transaction:	        5.21
-Shortest transaction:	        0.12
-```
-
-##### Network status
-```report
-PING my_host (x.x.x.x): 56 data bytes
-64 bytes from x.x.x.x: icmp_seq=0 ttl=56 time=123.134 ms
-64 bytes from x.x.x.x: icmp_seq=1 ttl=56 time=72.499 ms
-64 bytes from x.x.x.x: icmp_seq=2 ttl=56 time=69.226 ms
-64 bytes from x.x.x.x: icmp_seq=3 ttl=56 time=69.512 ms
-64 bytes from x.x.x.x: icmp_seq=4 ttl=56 time=81.412 ms
-```
-
-### Machine status
-![alt tag](https://github.com/gunblues/PolarBearFootprint/raw/master/test/machine_status_at_stress_test.png
-)
-
 ## If you want to relay to elasticsearch by logstash
 #### 01-polar-bear-footprint.conf
 ```config
@@ -108,6 +56,8 @@ input {
       codec => "json"
       data_type => "list"
       key => "footprint"
+      # batch_count => 1
+      # threads => 1
       type => "footprint"
   }
 }
@@ -117,15 +67,12 @@ filter {
         source => "ua"
     }
     geoip {
-      source => "ip"
+      source => "clientip"
       target => "geoip"
       database => "/etc/logstash/GeoLite2-City.mmdb"
-      add_field => [ "[geoip][coordinates]", "%{[geoip][longitude]}" ]
-      add_field => [ "[geoip][coordinates]", "%{[geoip][latitude]}"  ]
     }
     mutate {
-      convert => [ "[geoip][coordinates]", "float"]
-      remove_field => ["ua"]
+      remove_field => ["ua", "clientip", "@timestamp"]
     }
   }
 }
@@ -134,8 +81,41 @@ output {
         elasticsearch {
             hosts => ["your_elasticsearch_host:9200"]
             manage_template => false
-            index => "polarbearfootprint"
+            action => update
+            upsert => '{
+                "url" : "%{url}",
+                "scheme" : "%{scheme}",
+                "hostname": "%{hostname}",
+                "path": "%{path}",
+                "query": "%{query}",
+                "fragment": "%{fragment}",
+                "os": "%{os}",
+                "minor": "%{minor}",
+                "os_minor": "%{os_minor}",
+                "os_major": "%{os_major}",
+                "patch": "%{patch}",
+                "major": "%{major}",
+                "@version": "%{@version}",
+                "name": "%{name}",
+                "os_name": "%{os_name}",
+                "device": "%{device}",
+                "created": "%{created}",
+                "geoip": {
+                    "timezone": "%{[geoip][timezone]}",
+                    "ip": "%{[geoip][ip]}",
+                    "latitude": %{[geoip][latitude]},
+                    "longitude": %{[geoip][longitude]},
+                    "city_name": "%{[geoip][city_name]}",
+                    "continent_code": "%{[geoip][continent_code]}",
+                    "country_code2": "%{[geoip][country_code2]}",
+                    "country_code3": "%{[geoip][country_code3]}",
+                    "country_name": "%{[geoip][country_name]}",
+                    "location": [ %{[geoip][longitude]} , %{[geoip][latitude]}]
+                }
+            }'
+            index => "pbtest"
             document_type => "footprint"
+            document_id => "%{id}"
             user => "xxx"
             password => "yyy"
             ssl => true
@@ -143,31 +123,94 @@ output {
         }
         stdout { codec => rubydebug }
     }
+}                
+```
+#### 01-polar-bear-fingerprint.conf
+```
+input {
+  redis {
+      host => "your_redis_host"
+      codec => "json"
+      data_type => "list"
+      key => "fingerprint"
+      # batch_count => 1
+      # threads => 1
+      type => "fingerprint"
+  }
+}
+filter {
+  if [type] == "fingerprint" {
+    useragent {
+        source => "ua"
+    }
+    mutate {
+      remove_field => ["ua"]
+    }
+  }
+}
+output {
+    if [type] == "fingerprint" {
+        elasticsearch {
+            hosts => ["your_elasticsearch_host:9200"]
+            manage_template => false
+            action => update
+            upsert => '{
+                "updated" : "%{updated}",
+                "os": "%{os}",
+                "minor": "%{minor}",
+                "os_minor": "%{os_minor}",
+                "os_major": "%{os_major}",
+                "patch": "%{patch}",
+                "major": "%{major}",
+                "@version": "%{@version}",
+                "name": "%{name}",
+                "os_name": "%{os_name}",
+                "device": "%{device}"
+            }'
+            index => "pbtest"
+            document_type => "fingerprint"
+            document_id => "%{id}"
+            user => "xxx"
+            password => "yyy"
+            ssl => true
+            cacert => "your_path/ca.crt"
+        }
+
+        stdout { codec => rubydebug }
+    }
 }
 ```
-#### 02-webpage.conf
+#### 02-webpage-urltask.conf
 ```config
 input {
   redis {
       host => "your_redis_host"
       codec => "json"
       data_type => "list"
-      key => "page"
-      type => "page"
+      key => "urltask"
+      # batch_count => 1
+      # threads => 1
+      type => "urltask"
   }
 }
 output {
-    if [type] == "page" {
+    if [type] == "urltask" {
         elasticsearch {
             hosts => ["your_elasticsearch_host:9200"]
             manage_template => false
             action => "update"
             upsert => '{
                 "url" : "%{url}",
-                "status" : "init"
+                "scheme" : "%{scheme}",
+                "hostname": "%{hostname}",
+                "path": "%{path}",
+                "query": "%{query}",
+                "fragment": "%{fragment}",
+                "task_updated": "%{task_updated}",
+                "status": "init"
             }'
-            index => "webpage"
-            document_type => "page"
+            index => "uttest"
+            document_type => "urltask"
             document_id => "%{id}"
             user => "xxx"
             password => "yyy"
@@ -180,38 +223,302 @@ output {
 ```
 #### elasticsearch mapping
 ```mapping
-PUT polarbearfootprint 
+PUT polarbearfootprintv2
 {
   "mappings": {
-    "footprint": { 
-      "_all":       { "enabled": false  }, 
-      "properties": { 
-        "fp":    { 
-          "type": "keyword"  
-        }, 
-        "txn_id": { 
-          "type": "keyword"  
+    "footprint": {
+      "_all": {
+        "enabled": false
+      },
+      "properties": {
+        "txn_id": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "fp": {
+          "type": "keyword",
+          "index": "not_analyzed"
         },
         "url": {
-          "type": "string",
+          "type": "keyword",
           "index": "not_analyzed"
-        }         
+        },
+        "scheme": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "hostname": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "port": {
+          "type": "long"
+        },
+        "path": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "query": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "fragment": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "major": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "minor": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "os": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "os_name": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "name": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "params": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "patch": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "device": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "stay": {
+          "type": "long"
+        },
+        "title": {
+          "type": "text"
+        },
+        "created": {
+          "type": "date"
+        },
+        "geoip": {
+          "properties": { 
+            "timezone": {
+              "type": "keyword"
+            },
+            "ip": {
+              "type": "ip"
+            },
+            "latitude": {
+              "type": "float"
+            },
+            "longitude": {
+              "type": "float"
+            },
+            "city_name": {
+              "type": "keyword",
+              "index": "not_analyzed"
+            },
+            "continent_code": {
+              "type": "keyword",
+              "index": "not_analyzed"
+            },
+            "country_code2": {
+              "type": "keyword",
+              "index": "not_analyzed"
+            },
+            "country_code3": {
+              "type": "keyword",
+              "index": "not_analyzed"
+            },
+            "country_name": {
+              "type": "keyword",
+              "index": "not_analyzed"
+            },
+            "region_code": {
+              "type": "keyword",
+              "index": "not_analyzed"
+            },
+            "region_name": {
+              "type": "keyword",
+              "index": "not_analyzed"
+            },
+            "location": {
+              "type": "geo_point"
+            },
+            "postal_code": {
+              "type": "keyword",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      }
+    },
+    "fingerprint": {
+      "_all": {
+        "enabled": false
+      },
+      "properties": {
+        "fp": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "url": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "sex": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "age": {
+          "type": "long"
+        },
+        "major": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "minor": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "os": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "os_name": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "name": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "params": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "patch": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "device": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+
+        "updated": {
+          "type": "date"
+        }
       }
     }
   }
 }
 
-PUT webpage 
+PUT webpagev2 
 {
   "mappings": {
-    "page": { 
-      "_all":       { "enabled": false  }, 
+    "urltask": { 
+      "_all": { "enabled": false  }, 
       "properties": { 
         "url": {
-          "type": "string"
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "scheme": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "hostname": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "port": {
+          "type": "long"
+        },
+        "path": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "params": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "query": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "fragment": {
+          "type": "keyword",
+          "index": "not_analyzed"
         },
         "status": {
-          "type": "keyword"
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        “task_updated": {
+          "type": "date"
+        },
+        "fetch_date": {
+          "type": "date"
+        },
+        "pageid": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        }
+	  }
+    },
+    "page": { 
+      "_all": { "enabled": false  }, 
+      "properties": { 
+        "url": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "scheme": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "hostname": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "port": {
+          "type": "long"
+        },
+        "path": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "params": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "query": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "fragment": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "title": {
+          "type": "text"
+        },
+        "content": {
+          "type": "text"
+        },
+        "created": {
+          "type": "date"
+        },
+        "updated": {
+          "type": "date"
         }
       }
     }
