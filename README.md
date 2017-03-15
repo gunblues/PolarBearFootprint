@@ -368,10 +368,6 @@ PUT polarbearfootprintv2
         "enabled": false
       },
       "properties": {
-        "fp": {
-          "type": "keyword",
-          "index": "not_analyzed"
-        },
         "sex": {
           "type": "keyword",
           "index": "not_analyzed"
