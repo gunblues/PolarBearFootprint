@@ -81,27 +81,45 @@
         }
     }
 
+    window.pbfp = {};
+
+    window.pbfp.profile = function (profile) {
+        if (typeof txnId !== "undefined" && typeof myfp !== "undefined") {
+        	var json = {
+        	    "fp": myfp,
+                "txn_id": txnId,
+        	    "action": "profile",
+        	};
+
+			Object.keys(profile).map(function(key, index) {
+			   	json[key] = profile[key]; 
+			});                                    
+
+	        JSONP.get('//your_host/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
+	               if (typeof console !== "undefined" && typeof console.log !== "undefined") {
+	                   console.log(data);
+	               }
+	           });
+        } 
+    }
+
 	var txnId;
 	var myfp;
+	var loadTs;
 
     new Fingerprint2().get(function(fingerprint, components){
 	    myfp = fingerprint;	
-	    var ts = Math.round(new Date().getTime() / 1000);
+	    loadTs = Math.round(new Date().getTime() / 1000);
         var json = {
             "fp": myfp,
             "title": document.title,
-            "desc": getMetaContentByProperty("og:description"),
             "url": document.URL,
-            "ua": navigator.userAgent
+            "ua": navigator.userAgent,
+            "action": "load",
         };
 
-        if (typeof(pbfp) === 'object' && pbfp.hasOwnProperty("sid") && pbfp.hasOwnProperty("sn")) {
-            json.sid = pbfp.sid;
-            json.sn = pbfp.sn;
-        }
-
 	    if (typeof myfp === 'string' && myfp.length !== 0) {
-	    	txnId = myfp + ts;
+	    	txnId = myfp + loadTs;
 	    	json.txn_id = txnId;
 	    }
 
@@ -114,13 +132,16 @@
 
 	if (typeof window.onbeforeunload !== "undefined") {
 		window.onbeforeunload = function() {
-			if (typeof txnId !== "undefined" && typeof myfp !== "undefined") {
+			if (typeof txnId !== "undefined" && typeof myfp !== "undefined" && typeof loadTs !== "undefined") {
 	        	var json = {
 	        	    "fp": myfp,
 	        	    "url": document.URL,
-	        	    "away": 1,
-					"txn_id": txnId	
+					"txn_id": txnId,
+                    "action": "unload",
 	        	};
+	    	
+				var unloadTs = Math.round(new Date().getTime() / 1000);
+				json["stay"] = unloadTs - loadTs;
 				
 		        JSONP.get('//your_host/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
 		               if (typeof console !== "undefined" && typeof console.log !== "undefined") {

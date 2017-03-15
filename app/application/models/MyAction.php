@@ -4,22 +4,124 @@ class MyActionModel {
 
     //write your own action here
     static function execute($data) {
+        
+        MyRedis::init();
 
-        if (empty($data["url"])) {
+        if ($data["fp"] === "cookie") {
+            //no cookie right now
             return;
+
+            $data["txn_id"] = uniqid(gethostname(), true);
         }
 
-        MyRedis::init();
-        MyRedis::lpush("footprint", json_encode($data));
+        $nowDate = substr(gmdate('Y-m-d\TH:i:sP'), 0, 19);
+        $nowTime = time();
 
-        if (array_key_exists("away", $data) === false || $data["away"] !== 1) {
-            $host = parse_url($data["url"], PHP_URL_HOST);
-            MyRedis::lpush("page", json_encode(
-                array(
-                    "id" => $host . "_" . sha1($data["url"]),
-                    "url" => $data["url"]
-                )
-            ));
+        switch ($data["action"]) {
+            case "load":
+                if (empty($data["url"])) {
+                    return;
+                }
+        
+                $parseUrl = parse_url($data["url"]);
+
+                $port = 80;
+                if ($parseUrl["scheme"] === "https") {
+                    $port = 443;
+                }
+                
+                $footprint = array(
+                         "id" => $data["txn_id"],
+                         "created" => $nowDate,
+                         "clientip" => $data["clientip"],
+                         "ua" => $data["ua"],
+                         "url" => $data["url"], 
+                         "scheme" => $parseUrl["scheme"],
+                         "hostname" => $parseUrl["host"],
+                         "path" => $parseUrl["path"],
+                         "port" => $port,
+                         "query" => "",
+                         "fragment" => "", 
+                     );
+
+                $urltask = array(
+                         "task_updated" => $nowDate,
+                         "url" => $data["url"], 
+                         "scheme" => $parseUrl["scheme"],
+                         "hostname" => $parseUrl["host"],
+                         "path" => $parseUrl["path"],
+                         "port" => $port,
+                         "query" => "",
+                         "fragment" => "", 
+
+                     );
+
+                if (array_key_exists("port", $parseUrl)) {
+                    $footprint["port"] = $parseUrl["port"];
+                    $urltask["port"] = $parseUrl["port"];
+                }
+
+                if (array_key_exists("query", $parseUrl)) {
+                    $footprint["query"] = $parseUrl["query"];
+                    $urltask["query"] = $parseUrl["query"];
+
+                    $urltaskId = $parseUrl["host"].$parseUrl["path"].$parseUrl["query"];
+                } else {
+                    $urltaskId = $parseUrl["host"].$parseUrl["path"];
+                }
+                $urltask["id"] = $parseUrl["host"] . "_" . sha1($urltaskId);
+                
+                if (array_key_exists("fragment", $parseUrl)) {
+                    $footprint["fragment"] = $parseUrl["fragment"];
+                    $urltask["fragment"] = $parseUrl["fragment"];
+                }
+
+                MyRedis::lpush("footprint", json_encode($footprint));
+                MyRedis::lpush("urltask", json_encode($urltask));
+
+                if ($data["fp"] !== "cookie") {
+                    $fingerprint = array(
+                            "id" => $data["fp"],
+                            "updated" => $nowDate,
+                            "ua" => $data["ua"],
+                        );
+
+                    MyRedis::lpush("fingerprint", json_encode($fingerprint));
+                }
+
+                break;
+            case "unload":
+
+                $footprint = array(
+                        "id" => $data["txn_id"],
+                        "stay" => $data["stay"],
+                        "clientip" => $data["clientip"],
+                    );
+
+                MyRedis::lpush("footprint", json_encode($footprint));
+
+                break;
+            case "profile":
+                $fingerprint = array(
+                        "id" => $data["fp"],
+                        "updated" => $nowDate,
+                    );
+
+                if (array_key_exists("sex", $data)) {
+                    $fingerprint["sex"] = $data["sex"];
+                }
+
+                if (array_key_exists("age", $data) && is_int($data["age"])) {
+                    $fingerprint["age"] = $data["age"];
+                }
+
+                if (array_key_exists("email", $data)) {
+                    $fingerprint["email"] = $data["email"];
+                }
+
+                MyRedis::lpush("fingerprint", json_encode($fingerprint));
+
+                break;
         }
     }
 }

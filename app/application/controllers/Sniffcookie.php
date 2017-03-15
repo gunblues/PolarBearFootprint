@@ -13,11 +13,15 @@ class SniffcookieController extends Yaf_Controller_Abstract
     }
 
     public function indexAction() {
+        if (MyUtil::isBot()) {
+            return;
+        }
+
 		$k = "b";
 		$v = "";
 		if (!isset($_COOKIE[$k])) {
 			$v = uniqid(gethostname(), true);
-			setcookie($k, $v, time() + (86400 * 365 * 10), "/"); 
+			setcookie($k, $v, time() + (86400 * 365), "/"); 
 		} else {
 			$v = $_COOKIE[$k];
 		}
@@ -25,9 +29,9 @@ class SniffcookieController extends Yaf_Controller_Abstract
 		$data = array(
 			"fp" => "cookie",
 			"sid" => $v,
-			"ip" => MyUtil::getIpAddress(),
+			"clientip" => MyUtil::getIpAddress(),
 			"ua" => $_SERVER['HTTP_USER_AGENT'],
-			"ts" => time(),
+            "action" => "load",
 		);
 
 		if (array_key_exists("HTTP_REFERER", $_SERVER)) {

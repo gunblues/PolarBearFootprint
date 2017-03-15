@@ -31,6 +31,13 @@ class MyUtil {
 	    return true;
 	}
 
+    static function isBot() {
+        if (strpos($_SERVER['HTTP_USER_AGENT'], "Googlebot") !== false) {
+            return true;
+        }
+        
+        return false;
+    }
 }
 
 // vim: expandtab softtabstop=4 tabstop=4 shiftwidth=4 ts=4 sw=4

@@ -9,22 +9,25 @@
 class FootprintController extends ApiBaseController 
 {
     public function indexAction() {
+        if (MyUtil::isBot()) {
+            return;
+        }
+
 		$data = $this->getJson();
 		if ($data === false) {
 			return;
 		}
 
 		if (!$this->validateParameter($data, array(
-			'required' => array('fp', 'url'),
+			'required' => array('fp', 'txn_id',  'action'),
 			'dataType' => array(
-				'url' => FILTER_VALIDATE_URL,
-				'away'=> FILTER_VALIDATE_INT
+				'url' => FILTER_VALIDATE_URL
 			)
 		))) {
 			return;
 		}
 
-		$data['ip'] = MyUtil::getIpAddress();
+		$data['clientip'] = MyUtil::getIpAddress();
 		$data['ts'] = time();
 
 		MyActionModel::execute($data);
