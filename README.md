@@ -452,7 +452,7 @@ PUT webpagev2
           "type": "keyword",
           "index": "not_analyzed"
         },
-        “task_updated": {
+        "task_updated": {
           "type": "date"
         },
         "fetch_date": {
