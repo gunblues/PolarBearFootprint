@@ -504,9 +504,6 @@ PUT webpagev2
         "content": {
           "type": "text"
         },
-        "created": {
-          "type": "date"
-        },
         "updated": {
           "type": "date"
         }
