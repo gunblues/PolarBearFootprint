@@ -467,37 +467,6 @@ PUT webpagev2
     "page": { 
       "_all": { "enabled": false  }, 
       "properties": { 
-        "url": {
-          "type": "keyword",
-          "index": "not_analyzed"
-        },
-        "scheme": {
-          "type": "keyword",
-          "index": "not_analyzed"
-        },
-        "hostname": {
-          "type": "keyword",
-          "index": "not_analyzed"
-        },
-        "port": {
-          "type": "long"
-        },
-        "path": {
-          "type": "keyword",
-          "index": "not_analyzed"
-        },
-        "params": {
-          "type": "keyword",
-          "index": "not_analyzed"
-        },
-        "query": {
-          "type": "keyword",
-          "index": "not_analyzed"
-        },
-        "fragment": {
-          "type": "keyword",
-          "index": "not_analyzed"
-        },
         "title": {
           "type": "text"
         },
@@ -506,7 +475,11 @@ PUT webpagev2
         },
         "updated": {
           "type": "date"
-        }
+        },
+        "urllist": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        }	
       }
     }
   }
