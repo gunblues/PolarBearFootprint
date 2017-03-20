@@ -8,9 +8,6 @@ class MyActionModel {
         MyRedis::init();
 
         if ($data["fp"] === "cookie") {
-            //no cookie right now
-            return;
-
             $data["txn_id"] = uniqid(gethostname(), true);
         }
 
@@ -43,6 +40,14 @@ class MyActionModel {
                          "query" => "",
                          "fragment" => "", 
                      );
+
+                if ($data["fp"] !== "cookie") {
+                    $footprint["fp"] = $data["fp"];
+                    $footprint["cookie"] = "";
+                } else if ($data["fp"] === "cookie") {
+                    $footprint["cookie"] = $data["sid"];
+                    $footprint["fp"] = "";
+                }
 
                 $urltask = array(
                          "task_updated" => $nowDate,
@@ -87,6 +92,14 @@ class MyActionModel {
                         );
 
                     MyRedis::lpush("fingerprint", json_encode($fingerprint));
+                } else if ($data["fp"] === "cookie") {
+                    $cookie = array(
+                            "id" => $data["sid"],
+                            "updated" => $nowDate,
+                            "ua" => $data["ua"],
+                        );
+
+                    MyRedis::lpush("cookie", json_encode($cookie));
                 }
 
                 break;
