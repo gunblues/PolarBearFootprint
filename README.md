@@ -219,7 +219,7 @@ output {
                 "device": "%{device}"
             }'
             index => "pbtest"
-            document_type => "pbtest"
+            document_type => "cookie"
             document_id => "%{id}"
             user => "elastic"
             password => "breaktime168"
