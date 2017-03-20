@@ -76,6 +76,8 @@ output {
             manage_template => false
             action => update
             upsert => '{
+                "fp" : "%{fp}",	 
+                "cookie" : "%{cookie}",			
                 "url" : "%{url}",
                 "scheme" : "%{scheme}",
                 "hostname": "%{hostname}",
