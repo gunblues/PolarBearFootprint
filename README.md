@@ -293,6 +293,10 @@ PUT polarbearfootprintv2
           "type": "keyword",
           "index": "not_analyzed"
         },
+        "cookie": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },	
         "url": {
           "type": "keyword",
           "index": "not_analyzed"
