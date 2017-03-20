@@ -466,7 +466,7 @@ PUT polarbearfootprintv2
           "type": "date"
         }
       }
-    }
+    },
     "cookie": {
       "_all": {
         "enabled": false
