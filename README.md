@@ -176,6 +176,61 @@ output {
     }
 }
 ```
+#### 01-polar-bear-fingerprint.conf
+```
+input {
+  redis {
+      host => "10.140.0.8"
+      codec => "json"
+      data_type => "list"
+      key => "cookie"
+      # batch_count => 1
+      # threads => 1
+      type => "cookie"
+  }
+}
+filter {
+  if [type] == "cookie" {
+    useragent {
+        source => "ua"
+    }
+    mutate {
+      remove_field => ["ua", "@timestamp"]
+    }
+  }
+}
+output {
+    if [type] == "cookie" {
+        elasticsearch {
+            hosts => ["10.140.0.7:9200"]
+            manage_template => false
+            action => update
+            upsert => '{
+                "updated" : "%{updated}",
+                "os": "%{os}",
+                "minor": "%{minor}",
+                "os_minor": "%{os_minor}",
+                "os_major": "%{os_major}",
+                "patch": "%{patch}",
+                "major": "%{major}",
+                "@version": "%{@version}",
+                "name": "%{name}",
+                "os_name": "%{os_name}",
+                "device": "%{device}"
+            }'
+            index => "pbtest"
+            document_type => "pbtest"
+            document_id => "%{id}"
+            user => "elastic"
+            password => "breaktime168"
+            ssl => true
+            cacert => "/home/kevin/es/config/ca/ca.crt"
+        }
+
+        stdout { codec => rubydebug }
+    }
+}
+```
 #### 02-webpage-urltask.conf
 ```config
 input {
@@ -408,6 +463,48 @@ PUT polarbearfootprintv2
         }
       }
     }
+    "cookie": {
+      "_all": {
+        "enabled": false
+      },
+      "properties": {
+        "major": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "minor": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "os": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "os_name": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "name": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "params": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "patch": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "device": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },
+        "updated": {
+          "type": "date"
+        }
+      }
+    }    
   }
 }
 
