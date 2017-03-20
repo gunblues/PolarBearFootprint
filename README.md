@@ -467,7 +467,7 @@ PUT polarbearfootprintv2
         "updated": {
           "type": "date"
         },
-        "calculateKeywordsDate": {
+        "calculate_keywords_date": {
           "type": "date"
         }	
       }
@@ -512,7 +512,7 @@ PUT polarbearfootprintv2
         "updated": {
           "type": "date"
         },
-        "calculateKeywordsDate": {
+        "calculate_keywords_date": {
           "type": "date"
         }	
       }
