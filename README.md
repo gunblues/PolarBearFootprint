@@ -283,7 +283,7 @@ output {
 ```
 #### elasticsearch mapping
 ```mapping
-PUT polarbearfootprintv2
+PUT polarbearfootprint
 {
   "mappings": {
     "footprint": {
@@ -520,7 +520,7 @@ PUT polarbearfootprintv2
   }
 }
 
-PUT webpagev2 
+PUT webpage
 {
   "mappings": {
     "urltask": { 
