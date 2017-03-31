@@ -362,7 +362,8 @@ PUT polarbearfootprint
           "type": "long"
         },
         "title": {
-          "type": "text"
+          "type": "keyword",
+          "index": "not_analyzed"
         },
         "created": {
           "type": "date"
