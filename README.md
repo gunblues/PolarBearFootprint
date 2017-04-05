@@ -586,6 +586,10 @@ PUT webpage
         "updated": {
           "type": "date"
         },
+        "hostname": {
+          "type": "keyword",
+          "index": "not_analyzed"
+        },	
         "urllist": {
           "type": "keyword",
           "index": "not_analyzed"
