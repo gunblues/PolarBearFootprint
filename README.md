@@ -111,13 +111,10 @@ output {
                     }
                 }
             }'
-            index => "pbtest"
+            index => "polarbearfootprint"
             document_type => "footprint"
             document_id => "%{id}"
-            user => "xxx"
-            password => "yyy"
-            ssl => true
-            cacert => "your_path/ca.crt"
+            ssl => false
         }
         stdout { codec => rubydebug }
     }
@@ -165,13 +162,10 @@ output {
                 "os_name": "%{os_name}",
                 "device": "%{device}"
             }'
-            index => "pbtest"
+            index => "polarbearfootprint"
             document_type => "fingerprint"
             document_id => "%{id}"
-            user => "xxx"
-            password => "yyy"
-            ssl => true
-            cacert => "your_path/ca.crt"
+            ssl => false
         }
 
         stdout { codec => rubydebug }
@@ -220,13 +214,10 @@ output {
                 "os_name": "%{os_name}",
                 "device": "%{device}"
             }'
-            index => "pbtest"
+            index => "polarbearfootprint"
             document_type => "cookie"
             document_id => "%{id}"
-            user => "elastic"
-            password => "breaktime168"
-            ssl => true
-            cacert => "/home/kevin/es/config/ca/ca.crt"
+            ssl => false
         }
 
         stdout { codec => rubydebug }
@@ -269,13 +260,10 @@ output {
                 "task_updated": "%{task_updated}",
                 "status": "init"
             }'
-            index => "uttest"
+            index => "webpage"
             document_type => "urltask"
             document_id => "%{id}"
-            user => "xxx"
-            password => "yyy"
-            ssl => true
-            cacert => "your_path/ca.crt"
+            ssl => false
         }
         stdout { codec => rubydebug }
     }
