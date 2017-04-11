@@ -34,6 +34,16 @@ Gather User Information
   7. cp -r PolarBearFootprint/app/* Your_DocumentRoot
   8. Put code (include js or image) at client side
   9. Start to gather!!
+  10. Extra usage
+```js
+new Fingerprint2().get(function(fingerprint, components){
+    window.pbfp.profile({
+    	'email': 'polarbear@gmail.com',
+	'age': '5',
+	'sex': 'female'
+    });
+}
+```
   
 ## Example
   After Install completely, use browser to open your host and then you will see the image like belowed picture. You can check the page source to see that this page use two methods of including js and image
