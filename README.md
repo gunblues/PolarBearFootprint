@@ -42,7 +42,7 @@ new Fingerprint2().get(function(fingerprint, components){
 	'age': '5',
 	'sex': 'female'
     });
-}
+});
 ```
   
 ## Example
