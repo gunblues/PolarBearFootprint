@@ -104,6 +104,7 @@ output {
                 "name": "%{name}",
                 "os_name": "%{os_name}",
                 "device": "%{device}",
+		"title": "%{title}",
                 "created": "%{created}",
                 "geoip": {
                     "timezone": "%{[geoip][timezone]}",
