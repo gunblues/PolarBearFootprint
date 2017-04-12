@@ -29,6 +29,7 @@ class MyActionModel {
                 
                 $footprint = array(
                          "id" => $data["txn_id"],
+                         "title" => $data["title"],
                          "created" => $nowDate,
                          "clientip" => $data["clientip"],
                          "ua" => $data["ua"],
