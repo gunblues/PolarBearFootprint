@@ -26,6 +26,10 @@ class MyActionModel {
                 if ($parseUrl["scheme"] === "https") {
                     $port = 443;
                 }
+
+                if (!array_key_exists('title', $data)) {
+                    $data['title'] = "";
+                }
                 
                 $footprint = array(
                          "id" => $data["txn_id"],
