@@ -84,6 +84,7 @@ output {
         elasticsearch {
             hosts => ["your_elasticsearch_host:9200"]
             manage_template => false
+	    retry_on_conflict => 0
             action => update
             upsert => '{
                 "fp" : "%{fp}",	 
