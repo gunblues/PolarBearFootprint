@@ -29,6 +29,11 @@ class MyActionModel {
 
                 if (!array_key_exists('title', $data)) {
                     $data['title'] = "";
+                } else {
+                    //for LogStash::Json::ParserError
+                    $data['title'] = trim($data['title']);
+                    $data['title'] = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F]/u', '', $data['title']);
+                    $data['title'] = str_replace('"', "'", $data['title']);
                 }
                 
                 $footprint = array(
@@ -86,7 +91,9 @@ class MyActionModel {
                     $urltask["fragment"] = $parseUrl["fragment"];
                 }
 
-                MyRedis::lpush("footprint", json_encode($footprint));
+                $jsonFootprint = json_encode($footprint);
+
+                MyRedis::lpush("footprint", $jsonFootprint);
                 MyRedis::lpush("urltask", json_encode($urltask));
 
                 if ($data["fp"] !== "cookie") {
@@ -116,7 +123,7 @@ class MyActionModel {
                         "clientip" => $data["clientip"],
                     );
 
-                MyRedis::lpush("footprint", json_encode($footprint));
+                //MyRedis::lpush("footprint", json_encode($footprint));
 
                 break;
             case "profile":
