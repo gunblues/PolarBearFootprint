@@ -123,7 +123,7 @@ class MyActionModel {
                         "clientip" => $data["clientip"],
                     );
 
-                //MyRedis::lpush("footprint", json_encode($footprint));
+                MyRedis::lpush("footprint", json_encode($footprint));
 
                 break;
             case "profile":
