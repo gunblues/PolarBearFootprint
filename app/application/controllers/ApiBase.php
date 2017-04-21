@@ -77,6 +77,7 @@ class ApiBaseController extends Yaf_Controller_Abstract {
         }
 
         if ($this->jsonp) {
+            $this->getResponse()->setHeader('Content-Type', 'application/javascript');
             echo $this->getRequest()->getQuery('callback') . '(' . json_encode($res) . ')';
                 
         } else {

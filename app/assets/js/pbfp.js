@@ -3,6 +3,8 @@
 (function(window) {
     "use strict"; 
 
+    var http = 'http' + (window.location.protocol.charAt(4) == 's' ? 's://' : '://');
+
     /*
     * Lightweight JSONP fetcher
     * Copyright 2010-2012 Erik Karlsson. All rights reserved.
@@ -95,13 +97,13 @@
 			   	json[key] = profile[key]; 
 			});                                    
 
-	        JSONP.get('//your_host/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
+	        JSONP.get(http + 'your_host/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
 	               if (typeof console !== "undefined" && typeof console.log !== "undefined") {
 	                   console.log(data);
 	               }
 	           });
         } 
-    }
+    };
 
 	var txnId;
 	var myfp;
@@ -123,7 +125,7 @@
 	    	json.txn_id = txnId;
 	    }
 
-        JSONP.get('//your_host/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
+        JSONP.get(http + 'your_host/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
                if (typeof console !== "undefined" && typeof console.log !== "undefined") {
                    console.log(data);
                }
@@ -141,9 +143,9 @@
 	        	};
 	    	
 				var unloadTs = Math.round(new Date().getTime() / 1000);
-				json["stay"] = unloadTs - loadTs;
+				json.stay = unloadTs - loadTs;
 				
-		        JSONP.get('//your_host/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
+		        JSONP.get(http + 'your_host/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
 		               if (typeof console !== "undefined" && typeof console.log !== "undefined") {
 		                   console.log(data);
 		               }
