@@ -99,7 +99,7 @@
 
 	        JSONP.get(http + 'your_host/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
 	               if (typeof console !== "undefined" && typeof console.log !== "undefined") {
-	                   console.log(data);
+	                   //console.log(data);
 	               }
 	           });
         } 
@@ -127,7 +127,7 @@
 
         JSONP.get(http + 'your_host/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
                if (typeof console !== "undefined" && typeof console.log !== "undefined") {
-                   console.log(data);
+                   //console.log(data);
                }
            });
     });
@@ -147,7 +147,7 @@
 				
 		        JSONP.get(http + 'your_host/footprintjsonp', {"json":JSON.stringify(json)}, function(data) {
 		               if (typeof console !== "undefined" && typeof console.log !== "undefined") {
-		                   console.log(data);
+		                   //console.log(data);
 		               }
 		         });
 		     }
