@@ -4,7 +4,8 @@ const gulp = require('gulp'),
     jshint = require('gulp-jshint'),
     concat = require('gulp-concat'),
     replace = require('gulp-replace'),
-    argv = require('yargs').argv;
+    argv = require('yargs').argv,
+    stripDebug = require('gulp-strip-debug');
 
 gulp.task('pbfp.min.js', function(){
     return gulp.src(['app/assets/js/pbfp.js'])
@@ -19,6 +20,7 @@ gulp.task('pbfp.min.js', function(){
 
 gulp.task('all.js', ['pbfp.min.js'], function(){
     return gulp.src(['app/assets/js/fp.js', 'app/assets/js/pbfp.min.js'])
+        .pipe(stripDebug())
         .pipe(concat('all.js'))
         .pipe(gulp.dest('app/assets/js'));
 });
