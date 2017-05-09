@@ -128,7 +128,6 @@ output {
             document_id => "%{id}"
             ssl => false
         }
-        stdout { codec => rubydebug }
     }
 }                
 ```
@@ -179,8 +178,6 @@ output {
             document_id => "%{id}"
             ssl => false
         }
-
-        stdout { codec => rubydebug }
     }
 }
 ```
@@ -231,8 +228,6 @@ output {
             document_id => "%{id}"
             ssl => false
         }
-
-        stdout { codec => rubydebug }
     }
 }
 ```
@@ -277,7 +272,6 @@ output {
             document_id => "%{id}"
             ssl => false
         }
-        stdout { codec => rubydebug }
     }
 }
 ```
