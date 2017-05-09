@@ -33,6 +33,7 @@ class MyActionModel {
                     //for LogStash::Json::ParserError
                     $data['title'] = trim($data['title']);
                     $data['title'] = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F]/u', '', $data['title']);
+                    $data['title'] = str_replace(array("\r", "\n"), ' ', $data['title']);
                     $data['title'] = str_replace('"', "'", $data['title']);
                 }
                 
